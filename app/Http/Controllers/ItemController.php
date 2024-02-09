@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
@@ -13,9 +14,42 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        return "estamos en el controller de items";
     }
 
+    public function consult(Request $request){
+        try{
+            if($request->has("query")){
+                $item = Item::where('name','LIKE','%'.$request->get('query').'%')->first();
+                return response()->json([
+                    "isRequest"=> true,
+                    "success" => true,
+                    "messageError" => false,
+                    "message" => "Consulta con : ".$request->get('query'),
+                    "data" => $item
+                ]);
+            }else{
+                $item = Item::all();
+                return response()->json([
+                    "isRequest"=> true,
+                    "success" => true,
+                    "messageError" => false,
+                    "message" => "Todos los items",
+                    "data" => $item
+                ]);
+            }
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }   
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -29,7 +63,26 @@ class ItemController extends Controller
      */
     public function store(StoreItemRequest $request)
     {
-        //
+        try{
+            $item = Item::create($request->all());
+            return response()->json([
+                "isRequest"=> true,
+                "success" => true,
+                "messageError" => false,
+                "message" => "Creado Correctamente",
+                "data" => $item
+            ]);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }
     }
 
     /**
@@ -53,7 +106,26 @@ class ItemController extends Controller
      */
     public function update(UpdateItemRequest $request, Item $item)
     {
-        //
+        try{
+            $request = $item->update($request->all());
+            return response()->json([
+                "isRequest"=> true,
+                "success" => true,
+                "messageError" => false,
+                "message" => "Datos actualizados correctamente",
+                "data" => $request
+            ]);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }
     }
 
     /**
@@ -61,6 +133,49 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        try{
+            $request = $item->update(["isHabilitado"=> false]);
+            return response()->json([
+                "isRequest"=> true,
+                "success" => true,
+                "messageError" => false,
+                "message" => "Datos deshabilitado correctamente",
+                "data" => $request
+            ]);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }
+    }
+
+    public function build(Item $item)
+    {
+        try{
+            $request = $item->update(["isHabilitado"=> true]);
+            return response()->json([
+                "isRequest"=> true,
+                "success" => true,
+                "messageError" => false,
+                "message" => "Datos deshabilitado correctamente",
+                "data" => $request
+            ]);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }
     }
 }
