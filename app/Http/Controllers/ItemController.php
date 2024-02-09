@@ -20,7 +20,7 @@ class ItemController extends Controller
     public function consult(Request $request){
         try{
             if($request->has("query")){
-                $item = Item::where('name','LIKE','%'.$request->get('query').'%')->first();
+                $item = Item::where('name','LIKE','%'.$request->get('query').'%')->get();
                 return response()->json([
                     "isRequest"=> true,
                     "success" => true,
@@ -134,7 +134,7 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         try{
-            $request = $item->update(["isHabilitado"=> false]);
+            $request = $item->update(["isHabilitado"=> !$item->isHabilitado]);
             return response()->json([
                 "isRequest"=> true,
                 "success" => true,

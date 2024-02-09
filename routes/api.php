@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/items', ItemController::class);
-Route::post('/items/consult', [ItemController::class,'consult'])->name('items.consult');
+Route::post('/items/consultar', [ItemController::class,'consult'])->name('items.consult');
 Route::delete('/items/build/{item}', [ItemController::class,'build'])->name('items.build');
