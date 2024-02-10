@@ -17,10 +17,10 @@ class ItemController extends Controller
         return "estamos en el controller de items";
     }
 
-    public function consult(Request $request){
+    public function consultar(Request $request){
         try{
             if($request->has("query")){
-                $item = Item::where('name','LIKE','%'.$request->get('query').'%')->get();
+                $item = Item::where('detalle','LIKE','%'.$request->get('query').'%')->get();
                 return response()->json([
                     "isRequest"=> true,
                     "success" => true,

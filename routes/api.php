@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,11 @@ use App\Http\Controllers\ItemController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+//USERS
+Route::apiResource('/users', UserController::class);
+Route::post('/users/consultar', [UserController::class,'consultar'])->name('users.consultar');
 
+//ITEMS
 Route::apiResource('/items', ItemController::class);
-Route::post('/items/consultar', [ItemController::class,'consult'])->name('items.consult');
+Route::post('/items/consultar', [ItemController::class,'consultar'])->name('items.consult');
 Route::delete('/items/build/{item}', [ItemController::class,'build'])->name('items.build');
