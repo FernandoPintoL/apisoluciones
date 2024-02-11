@@ -12,6 +12,7 @@ class Item extends Model
     protected $primaryKey = "id";
     protected $fillable = [
         'detalle',
+        'photo_path',
         'precio_costo',
         'precio_venta',
         'isHabilitado',

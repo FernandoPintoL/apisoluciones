@@ -107,13 +107,13 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request, Item $item)
     {
         try{
-            $request = $item->update($request->all());
+            $response = $item->update($request->all());
             return response()->json([
                 "isRequest"=> true,
                 "success" => true,
                 "messageError" => false,
                 "message" => "Datos actualizados correctamente",
-                "data" => $request
+                "data" => $response
             ]);
         }catch(\Exception $e){
             $message = $e->getMessage();
@@ -177,5 +177,34 @@ class ItemController extends Controller
                 "data" => []
             ]);
         }
+    }
+
+    public function uploadimage(Request $request){
+        try{
+            if($request->hasFile('file')){
+                $extension = $request->file('file')->getClientOriginalExtension();
+                $filename= $request->get("id").'.'.$extension;
+                $path = $request->file('file')->storeAs('items', $filename);
+                $item = Item::find($request->get("id"))->first();
+                $item->update(['photo_path'=> "/storage/app/".$path]);
+            }
+            return response()->json([
+                "isRequest"=> true,
+                "success" => $request->hasFile('file'),
+                "messageError" => !$request->hasFile('file'),
+                "message" => $request->hasFile('file') ? "Archivos subidos" : "Archivos no subidos",
+                "data" => []
+            ]);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }   
     }
 }

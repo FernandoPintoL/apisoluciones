@@ -26,4 +26,5 @@ Route::post('/users/consultar', [UserController::class,'consultar'])->name('user
 //ITEMS
 Route::apiResource('/items', ItemController::class);
 Route::post('/items/consultar', [ItemController::class,'consultar'])->name('items.consult');
-Route::delete('/items/build/{item}', [ItemController::class,'build'])->name('items.build');
+Route::post('/items/uploadimage', [ItemController::class,'uploadimage'])->name('items.uploadimage');
+//Route::put('/items/{item}/uploadimage', [ItemController::class,'uploadimage'])->name('items.uploadimage');
