@@ -84,9 +84,31 @@ class MonedaController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    public function update_data(array $array, Moneda $moneda){
+        return $moneda->update($array);
+    }
     public function update(UpdateMonedaRequest $request, Moneda $moneda)
     {
-        //
+        try{
+            $response = $this->update_data($request->all(), $moneda);
+            return response()->json([
+                "isRequest"=> true,
+                "success" => $response,
+                "messageError" => !$response,
+                "message" => $response ? "Datos actualizados correctamente" : "Datos no actualizados",
+                "data" => $response
+            ]);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }
     }
 
     /**
@@ -94,6 +116,25 @@ class MonedaController extends Controller
      */
     public function destroy(Moneda $moneda)
     {
-        //
+        try{
+            $response = $moneda->delete();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => $response,
+                "messageError" => !$response,
+                "message" => $response ? "Datos eliminados correctamente" : "Los datos no pudieron ser eliminados",
+                "data" => $response
+            ]);
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }
     }
 }
