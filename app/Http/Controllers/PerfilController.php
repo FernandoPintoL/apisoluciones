@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Perfil;
 use App\Http\Requests\StorePerfilRequest;
 use App\Http\Requests\UpdatePerfilRequest;
+use Illuminate\Http\Request;
 
 class PerfilController extends Controller
 {
@@ -15,7 +16,39 @@ class PerfilController extends Controller
     {
         //
     }
-
+    public function consultar(Request $request){
+        try{
+            if($request->has("query")){
+                $item = Perfil::where('name','LIKE','%'.$request->get('query').'%')->get();
+                return response()->json([
+                    "isRequest"=> true,
+                    "success" => true,
+                    "messageError" => false,
+                    "message" => "Consulta con : ".$request->get('query'),
+                    "data" => $item
+                ]);
+            }else{
+                $item = Perfil::all();
+                return response()->json([
+                    "isRequest"=> true,
+                    "success" => true,
+                    "messageError" => false,
+                    "message" => "Todos los items",
+                    "data" => $item
+                ]);
+            }
+        }catch(\Exception $e){
+            $message = $e->getMessage();
+            $code = $e->getCode();
+            return response()->json([
+                "isRequest"=> true,
+                "success" => false,
+                "messageError" => true,
+                "message" => $message." Code: ".$code,
+                "data" => []
+            ]);
+        }   
+    }
     /**
      * Show the form for creating a new resource.
      */

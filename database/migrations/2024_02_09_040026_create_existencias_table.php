@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('existencias', function (Blueprint $table) {
             $table->id();
-            $table->double('stock')->unsigned()->default(0)->nullable();
+            $table->double('existencia')->unsigned()->default(0)->nullable();
+            $table->double('existencia_minima')->unsigned()->default(0)->nullable();
+            $table->double('existencia_maxima')->unsigned()->default(0)->nullable();
             $table->unsignedBigInteger('item_id');
-            $table->foreign( 'item_id' )->references( 'id' )->on( 'items' )->onDelete( 'cascade' )->onUpdate('cascade');
             $table->unsignedBigInteger('almacen_id');
-            $table->foreign('almacen_id')->references('id')->on('almacens')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+            $table->foreign( 'item_id' )->references( 'id' )->on( 'items' )->onDelete( 'cascade' )->onUpdate('cascade');
+            $table->foreign('almacen_id')->references('id')->on('almacens')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

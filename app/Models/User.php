@@ -17,7 +17,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-
+    protected $table = "users";
     /**
      * The attributes that are mass assignable.
      *
@@ -58,4 +58,12 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function creacion(){
+        return $this->hasOne('App/Models/Almacen', 'users_creacion_id', 'id');
+    }
+
+    public function responsable(){
+        return $this->hasOne('App/Models/Almacen', 'users_responsable_id', 'id');
+    }
 }

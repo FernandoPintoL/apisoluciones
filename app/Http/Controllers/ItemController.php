@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -181,19 +182,28 @@ class ItemController extends Controller
 
     public function uploadimage(Request $request){
         try{
+            $item = Item::where("id", "=",$request->get("id"))->first();
+            $response = "";
+            $path     = null;
             if($request->hasFile('file')){
                 $extension = $request->file('file')->getClientOriginalExtension();
                 $filename= $request->get("id").'.'.$extension;
-                $path = $request->file('file')->storeAs('items', $filename);
-                $item = Item::find($request->get("id"))->first();
-                $item->update(['photo_path'=> "/storage/app/".$path]);
+                //$path = $request->file('file')->storeAs('images', $filename);
+                $path = Storage::putFileAs('images', $request->file('file'), $filename);
+                //$item = Item::find($request->get("id"))->first();
+                $response = $item->update(['photo_path'=> url($path)]);
+                //Storage::disk( 'public' )->delete($path);
             }
             return response()->json([
                 "isRequest"=> true,
-                "success" => $request->hasFile('file'),
-                "messageError" => !$request->hasFile('file'),
-                "message" => $request->hasFile('file') ? "Archivos subidos" : "Archivos no subidos",
-                "data" => []
+                "success" => $response,
+                "messageError" => !$response && !$request->hasFile('file'),
+                "message" => isset($path) ? "Archivos subidos" : "Archivos no subidos",
+                "data" => [
+                    "id" => $request->get("id"),
+                    "item" => $item,
+                    "url"=> $item->photo_path,
+                ]
             ]);
         }catch(\Exception $e){
             $message = $e->getMessage();

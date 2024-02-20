@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('almacens', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_creacion_id');
+            $table->unsignedBigInteger('user_responsable_id');
             $table->string('name')->default('')->nullable();
-            $table->string('descripcion')->default('')->nullable();
             $table->double('capacidad_maxima')->unsigned()->default(0)->nullable();
             $table->double('capacidad_minima')->unsigned()->default(0)->nullable();
+            $table->string('estado')->default("")->nullable();
             $table->timestamps();
+            $table->foreign('user_creacion_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_responsable_id')->references('id')->on('users')->onDelete('no action')->onUpdate('no action');
         });
     }
 

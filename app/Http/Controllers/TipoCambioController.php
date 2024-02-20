@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TipoCambio;
+use App\Http\Requests\StoreTipoCambioRequest;
+use App\Http\Requests\UpdateTipoCambioRequest;
 use Illuminate\Http\Request;
-use App\Models\User;
 
-class UserController extends Controller
+class TipoCambioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +16,10 @@ class UserController extends Controller
     {
         //
     }
-
     public function consultar(Request $request){
         try{
             if($request->has("query")){
-                $item = User::where('name','LIKE','%'.$request->get('query').'%')->get();
+                $item = TipoCambio::where('id','LIKE','%'.$request->get('query').'%')->get();
                 return response()->json([
                     "isRequest"=> true,
                     "success" => true,
@@ -27,7 +28,7 @@ class UserController extends Controller
                     "data" => $item
                 ]);
             }else{
-                $item = User::all();
+                $item = TipoCambio::all();
                 return response()->json([
                     "isRequest"=> true,
                     "success" => true,
@@ -60,7 +61,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTipoCambioRequest $request)
     {
         //
     }
@@ -68,7 +69,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(TipoCambio $tipoCambio)
     {
         //
     }
@@ -76,7 +77,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(TipoCambio $tipoCambio)
     {
         //
     }
@@ -84,7 +85,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateTipoCambioRequest $request, TipoCambio $tipoCambio)
     {
         //
     }
@@ -92,7 +93,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(TipoCambio $tipoCambio)
     {
         //
     }

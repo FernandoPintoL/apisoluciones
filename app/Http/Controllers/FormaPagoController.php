@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Empresa;
-use App\Http\Requests\StoreEmpresaRequest;
-use App\Http\Requests\UpdateEmpresaRequest;
+use App\Models\FormaPago;
+use App\Http\Requests\StoreFormaPagoRequest;
+use App\Http\Requests\UpdateFormaPagoRequest;
 use Illuminate\Http\Request;
 
-class EmpresaController extends Controller
+class FormaPagoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class EmpresaController extends Controller
     public function consultar(Request $request){
         try{
             if($request->has("query")){
-                $item = Empresa::where('propietario','LIKE','%'.$request->get('query').'%')->get();
+                $item = FormaPago::where('detalle','LIKE','%'.$request->get('query').'%')->get();
                 return response()->json([
                     "isRequest"=> true,
                     "success" => true,
@@ -28,7 +28,7 @@ class EmpresaController extends Controller
                     "data" => $item
                 ]);
             }else{
-                $item = Empresa::all();
+                $item = FormaPago::all();
                 return response()->json([
                     "isRequest"=> true,
                     "success" => true,
@@ -54,16 +54,16 @@ class EmpresaController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function create_data(array $array){
-        return Empresa::create($array);
+        return FormaPago::create($array);
     }
-    public function store(StoreEmpresaRequest $request)
+    public function store(StoreFormaPagoRequest $request)
     {
         try{
             $response = $this->create_data($request->all());
@@ -90,7 +90,7 @@ class EmpresaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Empresa $empresa)
+    public function show(FormaPago $formaPago)
     {
         //
     }
@@ -98,7 +98,7 @@ class EmpresaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Empresa $empresa)
+    public function edit(FormaPago $formaPago)
     {
         //
     }
@@ -106,13 +106,13 @@ class EmpresaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update_data(array $array, Empresa $empresa){
-        return $empresa->update($array);
+    public function update_data(array $array, FormaPago $formaPago){
+        return $formaPago->update($array);
     }
-    public function update(UpdateEmpresaRequest $request, Empresa $empresa)
+    public function update(UpdateFormaPagoRequest $request, FormaPago $formaPago)
     {
         try{
-            $response = $this->update_data($request->all(), $empresa);
+            $response = $this->update_data($request->all(), $formaPago);
             return response()->json([
                 "isRequest"=> true,
                 "success" => $response,
@@ -136,10 +136,10 @@ class EmpresaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Empresa $empresa)
+    public function destroy(FormaPago $formaPago)
     {
         try{
-            $response = $empresa->delete();
+            $response = $formaPago->delete();
             return response()->json([
                 "isRequest"=> true,
                 "success" => $response,
