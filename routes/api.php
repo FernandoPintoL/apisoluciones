@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\DetalleCompraController;
+use App\Http\Controllers\DetalleVentaController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\ExistenciaController;
 use App\Http\Controllers\FormaPagoController;
@@ -27,6 +29,12 @@ Route::post('/clientes/consultar', [ClienteController::class,'consultar'])->name
 //COMPRA
 Route::apiResource('/compras', CompraController::class);
 Route::post('/compras/consultar', [CompraController::class,'consultar'])->name('compras.consultar');
+//DETALLECOMPRA
+Route::apiResource('/detallecompras', DetalleCompraController::class);
+Route::post('/detallecompras/consultar', [DetalleCompraController::class,'consultar'])->name('detallecompras.consultar');
+//DETALLEVENTA
+Route::apiResource('/detalleventas', DetalleVentaController::class);
+Route::post('/detalleventas/consultar', [DetalleVentaController::class,'consultar'])->name('detalleventas.consultar');
 //EMPRESA
 Route::apiResource('/empresas', EmpresaController::class);
 Route::post('/empresas/consultar', [EmpresaController::class,'consultar'])->name('empresas.consultar');
