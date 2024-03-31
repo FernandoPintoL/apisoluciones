@@ -65,6 +65,7 @@ Route::post('/tipocambios/consultar', [TipoCambioController::class,'consultar'])
 //USERS
 Route::apiResource('/users', UserController::class);
 Route::post('/users/consultar', [UserController::class,'consultar'])->name('users.consultar');
+Route::post('/users/registerOnApi', [UserController::class,'registerOnApi'])->name('users.registerOnApi');
 //Route::post('/items/uploadimage', [ItemController::class,'uploadimage'])->name('items.uploadimage');
 //VENTAS
 Route::apiResource('/ventas', VentaController::class);
