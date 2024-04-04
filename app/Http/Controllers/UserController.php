@@ -74,7 +74,9 @@ class UserController extends Controller
             'name' => $input['name'],
             'email' => $input['email'],
             'nick' => $input['nick'],
-            'password' => Hash::make($input['password'])
+            'password' => Hash::make($input['password']),
+            'is_habilitado' => $input['is_habilitado'],
+            'is_empresa' => $input['is_empresa'],
         ]);
     }
     public function registerOnApi(StoreUserRequest $request){
