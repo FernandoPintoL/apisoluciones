@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Laravel\Fortify\Contracts\CreatesNewUsers;
-use App\Models\User;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use App\Models\User;
 use Laravel\Fortify\Actions\AttemptToAuthenticate;
 use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
 use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
@@ -17,6 +17,7 @@ use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Features;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -102,7 +103,36 @@ class UserController extends Controller
             ]);
         }
     }
-    public function login(Request $request){
+    public function loginOnApi(Request $request){
+        $credentials = $request->validate([
+            'nick' => ['required'],
+            'password' => ['required'],
+        ]);
+
+        $user = User::where('nick', $request->nick)->first();
+        //return $user->email;
+        if ($user && Hash::check($request->password, $user->password)) {
+            $userData = array(
+                'email' => $user->email,
+                'password' => $request->password
+            );
+            if (Auth::attempt($userData)) {
+                //$request->session()->regenerate();
+                Auth::login($user);
+                $userLogin = auth()->user();
+                return response()->json($userLogin);
+            }    
+            return response()->json(["respuesta" => "no paso la auth"]);
+        }
+        return response()->json(["respuesta" => "password es incorrecto"]);
+        
+        /*$user = User::where('nick', $request->nick)->first();
+ 
+        if ($user &&
+            Hash::check($request->password, $user->password)) {
+            return $user;
+        }
+        return $user;
         Fortify::authenticateThrough(function (Request $request) {
             return array_filter([
                     //config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
@@ -112,7 +142,7 @@ class UserController extends Controller
                     AttemptToAuthenticate::class,
                     PrepareAuthenticatedSession::class,
             ]);
-        });
+        });*/
     }
 
     /**
